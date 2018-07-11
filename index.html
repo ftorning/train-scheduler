@@ -28,19 +28,92 @@
     <!-- Local CSS -->
     <link rel="stylesheet" type="text/css" media="screen" href="./assets/css/style.css" />
     <!-- Local Credentials -->
-    <script src="./assets/js/credentials.js"></script>
+    <script src="./assets/js/config.js"></script>
+    <script src="./assets/js/moment.min.js"></script>
+    
 
     <!-- Go nuts -->
     <title>New Project</title>
 </head>
 <body>
+        <div class="jumbotron">
+            <h1 class="display-4">Train Scheduler</h1>
+            <p class="lead">Find out when the next train arrives.</p>
+        </div>
     <div class="container">
         <div class="row">
-            <div class="col-md-12">
-                <h1 id="title">Hey there <img id="wink" src="assets/img/delete-me.png" alt="winky" /> </h1>
+            <div class="col-sm-12">
+                <br>
+                <!-- First panel is for handling the search parameters -->
+                <div class="card">
+                    <div class="card-header">
+                        <strong><i class="fa fa-list-alt"></i> Train Schedule</strong>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                <th scope="col">Train Name</th>
+                                <th scope="col">Destination</th>
+                                <th scope="col">Frequency</th>
+                                <th scope="col">Next Arrival</th>
+                                <th scope="col">Minutes Away</th>
+                                </tr>
+                            </thead>
+                            <tbody id="train-table">
+                                <tr>
+                                    <td>Example Express</td>
+                                    <td>Testing Town</td>
+                                    <td>30</td>
+                                    <td>05:28 PM</td>
+                                    <td>20</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <br>
+                <!-- First panel is for handling the search parameters -->
+                <div class="card">
+                    <div class="card-header">
+                        <strong><i class="fa fa-list-alt"></i> Add Train</strong>
+                    </div>
+                    <div class="card-body">
+                        <!-- Here we create an HTML Form for handling the inputs-->
+                        <form role="form" id="train-form">
+                            <!-- Here we create the text box for capturing the search term-->
+                            <div class="form-group">
+                                <label for="train-name">Train Name:</label>
+                                <input type="text" class="form-control" id="train-name">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="destination-name">Destination:</label>
+                                <input type="text" class="form-control" id="destination-name">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="starting-time">First Train Departure Time:</label>
+                                <input type="text" class="form-control" id="starting-time">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="frequency">Frequency:</label>
+                                <input type="text" class="form-control" id="frequency">
+                            </div>
+                            <!-- Here we have our final submit button -->
+                            <button type="submit" class="btn btn-primary" id="add-train">
+                                <i class="fa fa-search"></i> Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     <!-- Local JS -->
     <script src="./assets/js/main.js"></script>
 </body>

@@ -1,3 +1,9 @@
-#title {
+body {
     font-family: 'Montserrat', sans-serif;
 }
+
+.jumbotron, .card-header {
+    background-color: #9457eb;
+    color: white;
+}
+
