@@ -1,9 +1,5 @@
 console.log("main.js loaded");
 
-setTimeout(function(){
-    window.location.reload(1);
-}, 30000);
-
 var trainTable = $("#train-table");
 var trainFormSubmit = $("#add-train");
 
@@ -78,6 +74,18 @@ db.ref('train').on("child_added", function(snapshot) {
                         record.starting_time, record.frequency);
     train.addToTable();
 });
+
+setInterval(() => {
+    trainTable.empty();
+    db.ref('train').on('value', function(snapshot) {
+        snapshot.forEach(function(data) {
+            var record = data.val();
+            var train = new Train(record.name, record.destination, 
+                                  record.starting_time, record.frequency);
+            train.addToTable();
+        }) 
+    });
+  }, 10000);
 
 trainFormSubmit.on("click", function(event){
     event.preventDefault();
