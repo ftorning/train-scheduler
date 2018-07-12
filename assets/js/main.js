@@ -2,6 +2,10 @@ console.log("main.js loaded");
 
 var trainTable = $("#train-table");
 var trainFormSubmit = $("#add-train");
+var trainName = $('#train-name');
+var destinationName = $('#destination-name');
+var startingTime = $('#starting-time');
+var frequency = $('#frequency');
 
 // Initialize Firebase
 try {
@@ -18,18 +22,19 @@ class Train {
     constructor(name, destination, starting_time, frequency) {
         this.name = name;
         this.destination = destination;
-        this.starting_time = this.setParseTime(starting_time);
+        this.starting_time = moment.utc(starting_time, 'HH:mm').format('HH:mm');
         this.frequency = parseInt(frequency);
         
     }
+    
     setParseTime(time) {
-        try {
+        if (moment.utc(time, 'HH:mm').isValid()) {
             return moment.utc(time, 'HH:mm').format('HH:mm');
-
-        } catch {
+        } else {
             alert('Cannot parse train time');
         }
     }
+            
 
     getNextArrivalTime() {
         var current_time = moment().format("HH:mm");
@@ -69,7 +74,6 @@ class Train {
 }
 
 db.ref('train').on("child_added", function(snapshot) {
-    trainTable.empty();
     var record = snapshot.val()
     var train = new Train(record.name, record.destination, 
                         record.starting_time, record.frequency);
@@ -90,17 +94,73 @@ setInterval(() => {
 
 trainFormSubmit.on("click", function(event){
     event.preventDefault();
-    var name = $('#train-name').val();
-    var destination = $('#destination-name').val();
-    var starting_time = $('#starting-time').val();
-    var frequency = $('#frequency').val();
-    try {
+    var counter = 0;
+    $('input').each(function() {
+        if ($(this).hasClass("invalid")) {
+            counter++;
+        }
+    });
+    if (counter === 0) {
+        var name = $('#train-name').val();
+        var destination = $('#destination-name').val();
+        var starting_time = $('#starting-time').val();
+        var frequency = $('#frequency').val();
         newTrain = new Train(name, destination, starting_time, frequency);
+        trainTable.empty();
         newTrain.commit()
-    } catch {
-        alert('One or more fields were not formatted correctly');
+        $('input').each(function() {
+            $(this).removeClass("valid");
+            $(this).val('');
+        });
+    } else {
+        alert(counter + ' fields were not formatted correctly');
     }
 });
+
+$('input').on('input', function() {
+    console.log(this.id)
+    switch(this.id) {
+        case 'train-name':
+            if (trainName.val().length > 1) {
+                trainName.removeClass('invalid');
+                trainName.addClass('valid');
+            } else {
+                trainName.removeClass('valid');
+                trainName.addClass('invalid');
+            }
+            break;
+        case 'destination-name':
+            if (destinationName.val().length > 1) {
+                destinationName.removeClass('invalid');
+                destinationName.addClass('valid');
+            } else {
+                destinationName.removeClass('valid');
+                destinationName.addClass('invalid');
+            }
+            break;
+        case 'starting-time':
+            if(/^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/.test(startingTime.val())) {
+                startingTime.removeClass('invalid');
+                startingTime.addClass('valid');
+            } else {
+                startingTime.removeClass('valid');
+                startingTime.addClass('invalid');
+            }
+            break;
+        case 'frequency':
+            if (!isNaN(parseInt(frequency.val()))) {
+                frequency.removeClass('invalid');
+                frequency.addClass('valid');
+            } else {
+                frequency.removeClass('valid');
+                frequency.addClass('invalid');
+            }
+            break;
+    }
+    
+})
+    
+
 
 
 
