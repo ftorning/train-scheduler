@@ -69,6 +69,7 @@ class Train {
 }
 
 db.ref('train').on("child_added", function(snapshot) {
+    trainTable.empty();
     var record = snapshot.val()
     var train = new Train(record.name, record.destination, 
                         record.starting_time, record.frequency);
